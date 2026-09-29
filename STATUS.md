@@ -1,7 +1,9 @@
 # Status (2026-09-29)
 
+Brand: **JoNo Works** (named for Josie and Nora). Replaced "Open Data Labs" on 2026-09-29 after finding an active same-name AI data company at opendatalabs.com. Site stays on opendatalabs.dev for now. Products are branded "JoNo <App>" (JoNo FillCheck, JoNo Datum, ...).
+
 ## Where things stand
-- Four actors built, smoke-tested against live sources, committed on `main`. All four are pushed to the Apify account `opendatalabs` (renamed from the auto-generated `proper_heron` on 2026-09-29), built as 0.1.2, monetized pay-per-event, and PUBLISHED on the Store as of 2026-09-29 (`isPublic=true` via `apify actors info`; Store pages return 200 at apify.com/opendatalabs/<name>).
+- Four actors built, smoke-tested against live sources, committed on `main`. All four are pushed to the Apify account `jonoworks` (renamed from `proper_heron`, then `opendatalabs`, on 2026-09-29), built as 0.1.2, monetized pay-per-event, and PUBLISHED on the Store as of 2026-09-29 (`isPublic=true` via `apify actors info`; Store pages return 200 at apify.com/opendatalabs/<name>).
   - building-permits-open-data: https://console.apify.com/actors/ydMfwVpSQSyggNgge
   - grants-gov-opportunities: https://console.apify.com/actors/OxxtsgwNPczpmxrCv
   - podcast-directory-scraper: https://console.apify.com/actors/T00ogoqbyUoq1UczJ

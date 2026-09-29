@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Open Data Labs</title>
-<meta name="description" content="Pay-per-event data Actors and desktop tools for public business and government data. No login walls, no captcha solving, no personal data.">
-<link rel="icon" type="image/png" href="assets/favicon.png">
-<meta property="og:title" content="Open Data Labs">
+<title>JoNo Works</title>
+<meta name="description" content="JoNo Works: pay-per-event data Actors and desktop tools for networks, structured cabling, and public business data. No login walls, no captcha solving, no personal data.">
+<link rel="icon" type="image/png" href="assets/favicon-jonoworks.png">
+<meta property="og:title" content="JoNo Works">
 <meta property="og:description" content="Public business and government data, one clean record at a time.">
-<meta property="og:image" content="https://opendatalabs.dev/assets/odl-lockup-light.png">
+<meta property="og:image" content="https://opendatalabs.dev/assets/jonoworks-og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-  /* Tokens: Datum 6.0 surfaces, ODL blue as the accent, cyan reserved for live indicators. */
+  /* Tokens: Datum 6.0 surfaces, JoNo blue as the accent, cyan reserved for live indicators. */
   :root {
     --app: #090B10; --chrome: #0E1118; --panel: #0F131A; --elevated: #161B24; --overlay: #05070B;
     --line: #1E242F; --line-soft: #151A23;
@@ -51,6 +51,8 @@
   .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
   .brand img { height: 24px; width: auto; }
   .brand span { font-weight: 800; letter-spacing: 3px; font-size: 13px; }
+  .brand .mark { font-size: 20px; letter-spacing: 0; font-weight: 800; line-height: 1; padding: 2px 8px; border: 1.5px solid var(--line); border-radius: 6px; background: var(--elevated); }
+  .brand .mark b { color: var(--accent); font-weight: 800; }
   .tabs { display: flex; gap: 2px; background: var(--elevated); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 2px; margin-left: 8px; }
   .tabs button { appearance: none; background: transparent; border: 0; color: var(--dim); font: 600 13px var(--sans); letter-spacing: .3px; padding: 6px 14px; border-radius: 3px; cursor: pointer; transition: background var(--t-base) var(--ease-enter), color var(--t-base); }
   .tabs button:hover { color: var(--text); background: var(--line-soft); }
@@ -157,9 +159,9 @@
 <body>
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="#actors" aria-label="Open Data Labs home">
-      <img src="assets/odl-mark-dark.png" alt="ODL">
-      <span>OPEN DATA LABS</span>
+    <a class="brand" href="#actors" aria-label="JoNo Works home">
+      <span class="mark" aria-hidden="true">Jo<b>No</b></span>
+      <span>JONO WORKS</span>
     </a>
     <nav class="tabs" role="tablist" aria-label="Sections">
       <button role="tab" data-view="actors" aria-selected="true">Actors</button>
@@ -234,7 +236,7 @@
   <div class="view" id="view-about" role="tabpanel">
     <div class="pagehead">
       <h1>Built by an estimator,<br>for people who need the data.</h1>
-      <p>Open Data Labs is one person: a low-voltage estimator and RCDD in the Austin market who builds the tools he uses at work and publishes the ones other people can use too.</p>
+      <p>JoNo Works is one person: a low-voltage estimator and RCDD in the Austin market who builds the tools he uses at work and publishes the ones other people can use too.</p>
     </div>
     <div class="prose">
       <h2>Why these sources</h2>
@@ -245,7 +247,7 @@
       <p>Every Actor is smoke-tested against its live source every two days and fixed the same day a site changes. Open an issue on any Actor's Issues tab on Apify and you will get a reply within one business day.</p>
       <dl class="kv">
         <dt>email</dt><dd><a href="mailto:dwoo713@gmail.com">dwoo713@gmail.com</a></dd>
-        <dt>apify</dt><dd><a href="https://apify.com/opendatalabs">apify.com/opendatalabs</a></dd>
+        <dt>apify</dt><dd><a href="https://apify.com/jonoworks">apify.com/jonoworks</a></dd>
         <dt>github</dt><dd><a href="https://github.com/dwoo713/public-data-actors">github.com/dwoo713/public-data-actors</a></dd>
       </dl>
     </div>
@@ -254,10 +256,10 @@
 
 <footer>
   <div class="wrap">
-    <a href="https://apify.com/opendatalabs">Apify Store</a>
+    <a href="https://apify.com/jonoworks">Apify Store</a>
     <a href="https://github.com/dwoo713/public-data-actors">GitHub</a>
     <a href="mailto:dwoo713@gmail.com">Contact</a>
-    <span class="micro">Open Data Labs · Austin, TX</span>
+    <span class="micro">JoNo Works · Austin, TX · named for Josie and Nora</span>
   </div>
 </footer>
 <div class="toast" id="toast"></div>
@@ -271,7 +273,7 @@
 
   // Hash router for the three views.
   const views = ['actors', 'apps', 'about'];
-  const titles = { actors: 'Open Data Labs', apps: 'Desktop tools · Open Data Labs', about: 'About · Open Data Labs' };
+  const titles = { actors: 'JoNo Works', apps: 'Desktop tools · JoNo Works', about: 'About · JoNo Works' };
   function show(name) {
     if (!views.includes(name)) name = 'actors';
     views.forEach((v) => {
@@ -320,7 +322,7 @@
   (async () => {
     const grid = $('#actors'), live = $('#live'), toast = $('#toast');
     try {
-      const r = await fetch('https://api.apify.com/v2/store?username=opendatalabs&limit=100');
+      const r = await fetch('https://api.apify.com/v2/store?username=jonoworks&limit=100');
       if (!r.ok) throw new Error('HTTP ' + r.status);
       const { data } = await r.json();
       const items = (data.items || []).sort((a, b) => a.title.localeCompare(b.title));
@@ -361,7 +363,7 @@
       if (isFinite(minPrice)) count($('[data-count="minprice"]'), Math.round(minPrice * 100), (v) => '$' + (v / 100).toFixed(2));
     } catch (e) {
       live.innerHTML = '<i></i><span>CATALOG OFFLINE</span>';
-      grid.innerHTML = '<div class="empty">Could not load the catalog. Visit <a href="https://apify.com/opendatalabs">apify.com/opendatalabs</a>.</div>';
+      grid.innerHTML = '<div class="empty">Could not load the catalog. Visit <a href="https://apify.com/jonoworks">apify.com/jonoworks</a>.</div>';
       toast.textContent = 'Apify Store API unreachable: ' + e.message; toast.style.display = 'block';
     }
   })();
