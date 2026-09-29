@@ -1,7 +1,7 @@
 # Status (2026-09-29)
 
 ## Where things stand
-- Four actors built, smoke-tested against live sources, committed on `main`. All four are pushed to the Apify account `opendatalabs` (renamed from the auto-generated `proper_heron` on 2026-09-29) and built successfully (build 0.1.1 each), but none are on the Store yet.
+- Four actors built, smoke-tested against live sources, committed on `main`. All four are pushed to the Apify account `opendatalabs` (renamed from the auto-generated `proper_heron` on 2026-09-29), built as 0.1.2, monetized pay-per-event, and PUBLISHED on the Store as of 2026-09-29 (`isPublic=true` via `apify actors info`; Store pages return 200 at apify.com/opendatalabs/<name>).
   - building-permits-open-data: https://console.apify.com/actors/ydMfwVpSQSyggNgge
   - grants-gov-opportunities: https://console.apify.com/actors/OxxtsgwNPczpmxrCv
   - podcast-directory-scraper: https://console.apify.com/actors/T00ogoqbyUoq1UczJ
@@ -16,10 +16,11 @@
 4. DONE 2026-09-29: pay-per-event pricing set and verified via `apify actors info` on all four actors (grants `opportunity` $0.01, permits `permit` $0.006, procurement `solicitation` $0.015, podcasts `show` $0.02 + `episode` $0.0005, plus `apify-actor-start` $0.00005 on each). The synthetic `apify-default-dataset-item` event was removed on every actor because the code already charges explicitly per record.
 
 ## Next steps, in order
-1. Publish to Store, per actor (green "Publish on Store" button on each Publishing tab). Everything above it is complete. Owner decision.
+1. DONE 2026-09-29: published to Store, all four.
 2. Set `APIFY_TOKEN` in the Claude Code web routine's environment so the weekly job can push fixes.
 3. Optional: Creator Plan so free-tier runs do not cost compute.
 4. Watch the Issues tab on each actor and answer within a business day; response time feeds Store ranking.
+5. Store listings need an Actor output schema (`.actor/output_schema.json`, referenced by `"output"` in actor.json) or the Publishing tab blocks publishing. Added 2026-09-29 to all four.
 
 ## Decisions already made
 - Non-industry only. Public government and directory data. No login walls, no captcha evasion, no personal data.
