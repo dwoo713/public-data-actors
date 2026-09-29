@@ -11,8 +11,8 @@
 
 ## Blockers only the account owner can clear (Apify Console)
 1. DONE 2026-09-29: public profile (name, README bio, GitHub link, "publicly visible" on, contact email hidden) and username `opendatalabs`.
-2. Billing: add billing details and a payment method. The Monetization panel on every actor is disabled until this is done.
-3. Optional: Settings > Payouts (PayPal or bank wire) so earnings can actually be paid out.
+2. DONE 2026-09-29: billing details and a Visa payment method are on file.
+3. Payout beneficiary: "Set up monetization" on any actor's Publishing tab opens a beneficiary form (personal name, address, PayPal email or Wise/bank) that needs ID verification. Pay-per-event pricing cannot be entered until this is saved and verified. Owner must fill this; Claude is blocked from entering payout details.
 
 ## Next steps after those, in order
 1. Per actor: Publishing tab > Monetization > Pay per event > add the events and prices from `PUBLISH.md` > save. Display information and input schema already show green checks.
