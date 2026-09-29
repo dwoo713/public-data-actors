@@ -10,6 +10,6 @@ const actors = readdirSync(root, { withFileTypes: true })
     .map((d) => d.name).filter((n) => wanted.length === 0 || wanted.includes(n));
 for (const name of actors) {
     console.log(`\n=== apify push ${name}`);
-    const r = spawnSync('npx', ['apify', 'push', '--no-prompt'], { cwd: join(root, name), stdio: 'inherit', shell: process.platform === 'win32' });
+    const r = spawnSync('npx', ['apify', 'push'], { cwd: join(root, name), stdio: 'inherit', shell: process.platform === 'win32' });
     if (r.status !== 0) process.exit(r.status);
 }
