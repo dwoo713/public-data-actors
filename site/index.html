@@ -4,99 +4,367 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Open Data Labs</title>
-<meta name="description" content="Pay-per-event Apify Actors for public business and government data. No login walls, no captcha solving, no personal data.">
+<meta name="description" content="Pay-per-event data Actors and desktop tools for public business and government data. No login walls, no captcha solving, no personal data.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta property="og:title" content="Open Data Labs">
+<meta property="og:description" content="Public business and government data, one clean record at a time.">
+<meta property="og:image" content="https://opendatalabs.dev/assets/odl-lockup-light.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
+  /* Tokens: Datum 6.0 surfaces, ODL blue as the accent, cyan reserved for live indicators. */
   :root {
-    --bg: #f6f7f9; --panel: #ffffff; --ink: #14171c; --muted: #5d6673; --line: #e2e6eb;
-    --accent: #0d6b3e; --accent-ink: #ffffff; --chip: #eaf5ee;
+    --app: #090B10; --chrome: #0E1118; --panel: #0F131A; --elevated: #161B24; --overlay: #05070B;
+    --line: #1E242F; --line-soft: #151A23;
+    --text: #F5F7FA; --dim: #98A2B3; --faint: #5D6675;
+    --accent: #0052E6; --accent-hover: #2E6BEA; --accent-press: #0045C1; --accent-soft: rgba(0,82,230,0.16); --on-accent: #FFFFFF;
+    --signal: #19D9E9; --signal-soft: rgba(25,217,233,0.16);
+    --success: #3FD08A; --success-soft: rgba(63,208,138,0.14);
+    --warn: #F5A524; --warn-soft: rgba(245,165,36,0.14);
+    --danger: #FF315D;
+    --grad: linear-gradient(90deg, var(--accent) 0%, var(--signal) 100%);
+    --sans: "Barlow", "Aptos", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    --mono: "Share Tech Mono", "Cascadia Mono", Consolas, monospace;
+    --r: 6px; --r-sm: 4px;
+    --t-quick: 90ms; --t-base: 180ms; --t-calm: 280ms;
+    --ease-enter: cubic-bezier(.33,1,.68,1); --ease-exit: cubic-bezier(.32,0,.67,0);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0f1216; --panel: #171b21; --ink: #e8ebef; --muted: #9aa4b1; --line: #262c35;
-      --accent: #3ddc84; --accent-ink: #0b1a12; --chip: #15281d;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0f1216; --panel: #171b21; --ink: #e8ebef; --muted: #9aa4b1; --line: #262c35;
-    --accent: #3ddc84; --accent-ink: #0b1a12; --chip: #15281d;
-  }
+  :root[data-theme="dark"] { color-scheme: dark; }
+  :root:not([data-theme="light"]) { color-scheme: dark; }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { color-scheme: dark; } }
+
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--app); color: var(--text); font: 16px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
   a { color: inherit; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
-  header { padding: 56px 0 24px; }
-  .brand { font-weight: 700; letter-spacing: .02em; font-size: 14px; color: var(--muted); text-transform: uppercase; }
-  h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.15; margin: 8px 0 12px; }
-  .lede { color: var(--muted); max-width: 640px; margin: 0; font-size: 17px; }
-  .rules { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
-  .rules li { background: var(--chip); color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 13px; }
-  section { padding: 24px 0 40px; }
-  h2 { font-size: 20px; margin: 0 0 16px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
-  .card h3 { margin: 0; font-size: 17px; line-height: 1.3; }
-  .card p { margin: 0; color: var(--muted); font-size: 14px; flex: 1; }
-  .price { font-weight: 600; font-size: 14px; }
-  .price small { color: var(--muted); font-weight: 400; }
-  .btn { display: inline-block; background: var(--accent); color: var(--accent-ink); text-decoration: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 14px; align-self: flex-start; }
-  .meta { color: var(--muted); font-size: 12px; }
-  .empty { color: var(--muted); }
-  footer { border-top: 1px solid var(--line); padding: 24px 0 48px; color: var(--muted); font-size: 14px; }
-  footer a { margin-right: 16px; }
+  img { display: block; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  .mono { font-family: var(--mono); letter-spacing: .04em; }
+  .micro { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--faint); }
+  .sr { position: absolute; left: -9999px; }
+
+  /* Top bar */
+  .topbar { position: sticky; top: 0; z-index: 10; background: var(--chrome); }
+  .topbar::after { content: ""; display: block; height: 2px; background: var(--grad); }
+  .topbar .wrap { display: flex; align-items: center; gap: 18px; min-height: 64px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .brand img { height: 24px; width: auto; }
+  .brand span { font-weight: 800; letter-spacing: 3px; font-size: 13px; }
+  .tabs { display: flex; gap: 2px; background: var(--elevated); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 2px; margin-left: 8px; }
+  .tabs button { appearance: none; background: transparent; border: 0; color: var(--dim); font: 600 13px var(--sans); letter-spacing: .3px; padding: 6px 14px; border-radius: 3px; cursor: pointer; transition: background var(--t-base) var(--ease-enter), color var(--t-base); }
+  .tabs button:hover { color: var(--text); background: var(--line-soft); }
+  .tabs button[aria-selected="true"] { background: var(--accent); color: var(--on-accent); }
+  .topbar .right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--signal); background: var(--signal-soft); border: 1px solid rgba(25,217,233,.35); border-radius: 999px; padding: 4px 10px 4px 8px; }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 0 rgba(25,217,233,.6); animation: pulse 2.2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(25,217,233,.55); } 70% { box-shadow: 0 0 0 8px rgba(25,217,233,0); } 100% { box-shadow: 0 0 0 0 rgba(25,217,233,0); } }
+  .iconlink { color: var(--dim); display: inline-flex; padding: 6px; border-radius: var(--r-sm); border: 1px solid transparent; }
+  .iconlink:hover { color: var(--text); background: var(--elevated); border-color: var(--line); }
+  .iconlink svg { width: 18px; height: 18px; fill: currentColor; }
+
+  /* Views */
+  .view { display: none; padding: 40px 0 64px; }
+  .view.active { display: block; animation: rise var(--t-calm) var(--ease-enter); }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .pagehead h1 { font-size: clamp(30px, 4.2vw, 44px); line-height: 1.08; font-weight: 800; letter-spacing: -.01em; margin: 0 0 10px; }
+  .pagehead h1::after { content: ""; display: block; width: 52px; height: 3px; background: var(--grad); margin-top: 14px; border-radius: 2px; }
+  .pagehead p { color: var(--dim); max-width: 660px; margin: 12px 0 0; font-size: 17px; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 28px 0 8px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; min-height: 68px; transition: border-color var(--t-base); }
+  .stat:hover { border-color: var(--accent); }
+  .stat b { display: block; font-size: 26px; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .stat b::after { content: ""; display: block; width: 20px; height: 2px; background: var(--accent-soft); margin: 6px 0 6px; }
+  .stat .micro { font-weight: 600; }
+
+  .rules { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; }
+  .rules li { font-family: var(--mono); font-size: 12px; color: var(--dim); background: var(--elevated); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; }
+  .rules li::before { content: "✓ "; color: var(--success); }
+
+  section { margin-top: 44px; }
+  .sechead { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; }
+  .sechead h2 { font-size: 20px; font-weight: 800; margin: 0; }
+  .sechead .micro { margin-left: auto; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 12px; transition: border-color var(--t-base), transform var(--t-base) var(--ease-enter); }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card .head { display: flex; align-items: center; gap: 12px; }
+  .tile { width: 44px; height: 44px; border-radius: 8px; background: #F7F6F2; border: 1px solid var(--line); overflow: hidden; flex: none; display: grid; place-items: center; font-weight: 800; color: #111; }
+  .tile img { width: 100%; height: 100%; object-fit: cover; }
+  .card h3 { margin: 0; font-size: 16px; line-height: 1.25; font-weight: 700; }
+  .card p { margin: 0; color: var(--dim); font-size: 14px; flex: 1; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+  .chip.live { color: var(--success); background: var(--success-soft); border-color: rgba(63,208,138,.35); }
+  .chip.live i { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+  .chip.dev { color: var(--warn); background: var(--warn-soft); border-color: rgba(245,165,36,.35); }
+  .chip.eval { color: var(--signal); background: var(--signal-soft); border-color: rgba(25,217,233,.35); }
+  .price { display: flex; align-items: baseline; gap: 8px; font-family: var(--mono); }
+  .price b { font-size: 18px; font-weight: 400; color: var(--text); }
+  .price span { font-size: 12px; color: var(--faint); }
+  .meta { display: flex; gap: 14px; font-family: var(--mono); font-size: 11px; color: var(--faint); }
+  .actions { display: flex; gap: 8px; margin-top: 2px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 32px; padding: 4px 12px; border-radius: var(--r-sm); font: 600 13px var(--sans); text-decoration: none; border: 1.2px solid transparent; cursor: pointer; transition: background var(--t-quick), border-color var(--t-quick), color var(--t-quick); }
+  .btn.primary { background: var(--accent); color: var(--on-accent); }
+  .btn.primary:hover { background: var(--accent-hover); }
+  .btn.primary:active { background: var(--accent-press); }
+  .btn.ghost { border-color: var(--line); color: var(--dim); }
+  .btn.ghost:hover { border-color: var(--accent); color: var(--text); background: var(--accent-soft); }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+  .step { padding: 16px 18px; border-right: 1px solid var(--line-soft); }
+  .step:last-child { border-right: 0; }
+  .step .n { font-family: var(--mono); color: var(--signal); font-size: 12px; }
+  .step h4 { margin: 4px 0 4px; font-size: 15px; font-weight: 700; }
+  .step p { margin: 0; color: var(--dim); font-size: 13px; }
+  .step code { font-family: var(--mono); font-size: 12px; color: var(--signal); }
+
+  .prose { max-width: 720px; }
+  .prose h2 { font-size: 20px; font-weight: 800; margin: 28px 0 8px; }
+  .prose p { color: var(--dim); margin: 0 0 12px; }
+  .prose strong { color: var(--text); font-weight: 600; }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; font-size: 14px; margin: 10px 0 0; }
+  .kv dt { font-family: var(--mono); color: var(--faint); font-size: 12px; padding-top: 2px; }
+  .kv dd { margin: 0; color: var(--dim); }
+  .kv dd a { color: var(--text); }
+
+  .empty { color: var(--dim); font-size: 14px; padding: 18px; border: 1px dashed var(--line); border-radius: var(--r); }
+  .toast { position: fixed; right: 16px; bottom: 16px; background: var(--elevated); border: 1px solid var(--line); border-left: 3px solid var(--danger); border-radius: var(--r); padding: 10px 14px; font-size: 13px; color: var(--dim); display: none; }
+
+  footer { border-top: 1px solid var(--line); background: var(--chrome); padding: 22px 0 40px; margin-top: 24px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; color: var(--dim); font-size: 13px; }
+  footer a { color: var(--dim); }
+  footer a:hover { color: var(--text); }
+  footer .micro { margin-left: auto; }
+
+  @media (max-width: 720px) {
+    .topbar .wrap { flex-wrap: wrap; padding-top: 10px; padding-bottom: 10px; gap: 10px; }
+    .tabs { order: 3; width: 100%; justify-content: stretch; margin: 0; }
+    .tabs button { flex: 1; }
+    .topbar .right { margin-left: auto; }
+    .live span { display: none; }
+    .step { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+    footer .micro { margin-left: 0; width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand">Open Data Labs</div>
-    <h1>Public business and government data, one clean record at a time.</h1>
-    <p class="lede">Pay-per-event Actors on the Apify platform. Each one pulls from public pages and open-data APIs into a single stable JSON schema, smoke-tested against its live source every week.</p>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#actors" aria-label="Open Data Labs home">
+      <img src="assets/odl-mark-dark.png" alt="ODL">
+      <span>OPEN DATA LABS</span>
+    </a>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" data-view="actors" aria-selected="true">Actors</button>
+      <button role="tab" data-view="apps" aria-selected="false">Apps</button>
+      <button role="tab" data-view="about" aria-selected="false">About</button>
+    </nav>
+    <div class="right">
+      <div class="live" id="live" title="Actors published on Apify Store"><i></i><span>LOADING</span></div>
+      <a class="iconlink" href="https://github.com/dwoo713/public-data-actors" aria-label="Source on GitHub" title="Source on GitHub">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ACTORS -->
+  <div class="view active" id="view-actors" role="tabpanel">
+    <div class="pagehead">
+      <h1>Public business and government data,<br>one clean record at a time.</h1>
+      <p>Pay-per-event Actors on the Apify platform. Each one pulls from public pages and open-data APIs into a single stable JSON schema, smoke-tested against its live source every two days.</p>
+    </div>
+
+    <div class="stats" id="stats">
+      <div class="stat"><b data-count="actors">–</b><span class="micro">Actors live</span></div>
+      <div class="stat"><b data-count="runs">–</b><span class="micro">Total runs</span></div>
+      <div class="stat"><b data-count="users">–</b><span class="micro">Users</span></div>
+      <div class="stat"><b data-count="minprice">–</b><span class="micro">From, per 1,000 records</span></div>
+    </div>
+
     <ul class="rules">
-      <li>No login walls</li><li>No captcha solving</li><li>No personal data</li><li>robots.txt honored</li><li>Polite request rates</li>
+      <li>No login walls</li><li>No captcha solving</li><li>No personal data</li><li>robots.txt honored</li><li>Polite request rates</li><li>Null, never empty string</li>
     </ul>
-  </header>
 
-  <section>
-    <h2>Actors</h2>
-    <div id="actors" class="grid"><p class="empty">Loading catalog from Apify Store…</p></div>
-  </section>
+    <section>
+      <div class="sechead"><h2>Actors</h2><span class="micro" id="catalog-note">Live from Apify Store</span></div>
+      <div id="actors" class="grid"><div class="empty">Loading catalog…</div></div>
+    </section>
 
-  <footer>
-    <a href="https://apify.com/opendatalabs">Apify Store profile</a>
-    <a href="https://github.com/dwoo713/public-data-actors">Source on GitHub</a>
-    <span>Open an issue on any Actor and you will get a reply within one business day.</span>
-  </footer>
-</div>
+    <section>
+      <div class="sechead"><h2>How it works</h2></div>
+      <div class="steps">
+        <div class="step"><div class="n">01</div><h4>Pick an Actor</h4><p>Open it on Apify Store. Every input is documented with a working example.</p></div>
+        <div class="step"><div class="n">02</div><h4>Run it, or schedule it</h4><p>Run from the Apify console, the CLI, or the REST API. Schedule daily pulls in two clicks.</p></div>
+        <div class="step"><div class="n">03</div><h4>Pay per record</h4><p>You are charged once per record written, plus a fraction of a cent to start. Set a max spend per run.</p></div>
+        <div class="step"><div class="n">04</div><h4>Get clean JSON</h4><p>Download as JSON, CSV, or Excel, or read it from the API. <code>scrapedAt</code> on every record.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sechead"><h2>Under evaluation</h2><span class="micro">Next sources, not yet built</span></div>
+      <div class="grid" id="roadmap-actors"></div>
+    </section>
+  </div>
+
+  <!-- APPS -->
+  <div class="view" id="view-apps" role="tabpanel">
+    <div class="pagehead">
+      <h1>Desktop tools,<br>built for the estimating desk.</h1>
+      <p>Windows applications that grew out of daily estimating and drawing work. Nothing here is for sale yet. Each tool is listed with its real status, and a name once it has a release build.</p>
+    </div>
+    <section>
+      <div class="sechead"><h2>In development</h2><span class="micro">Status is updated with each release</span></div>
+      <div class="grid" id="apps"></div>
+    </section>
+    <section>
+      <div class="empty">Want to know when the first one ships? <a href="mailto:dwoo713@gmail.com?subject=Open%20Data%20Labs%20desktop%20tools">Email me</a> and I'll add you to the list. One message when it's ready, nothing else.</div>
+    </section>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="view" id="view-about" role="tabpanel">
+    <div class="pagehead">
+      <h1>Built by an estimator,<br>for people who need the data.</h1>
+      <p>Open Data Labs is one person: a low-voltage estimator and RCDD in the Austin market who builds the tools he uses at work and publishes the ones other people can use too.</p>
+    </div>
+    <div class="prose">
+      <h2>Why these sources</h2>
+      <p>Procurement portals, permit records, and grant listings are what I read every week to find work and price it. The Actors here are the scrapers I would want if I were paying for them: <strong>one schema per source family</strong>, nulls instead of empty strings, and a timestamp on every record so you know how fresh it is.</p>
+      <h2>Rules I don't break</h2>
+      <p>Public pages and public APIs only. Nothing behind a login, paywall, or members-only label. robots.txt is honored and sources that block crawlers are dropped, not worked around. No captcha solving, no fingerprint evasion, no residential proxies. No individual personal data: business names and official government buyer contacts, nothing else.</p>
+      <h2>Support</h2>
+      <p>Every Actor is smoke-tested against its live source every two days and fixed the same day a site changes. Open an issue on any Actor's Issues tab on Apify and you will get a reply within one business day.</p>
+      <dl class="kv">
+        <dt>email</dt><dd><a href="mailto:dwoo713@gmail.com">dwoo713@gmail.com</a></dd>
+        <dt>apify</dt><dd><a href="https://apify.com/opendatalabs">apify.com/opendatalabs</a></dd>
+        <dt>github</dt><dd><a href="https://github.com/dwoo713/public-data-actors">github.com/dwoo713/public-data-actors</a></dd>
+      </dl>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="https://apify.com/opendatalabs">Apify Store</a>
+    <a href="https://github.com/dwoo713/public-data-actors">GitHub</a>
+    <a href="mailto:dwoo713@gmail.com">Contact</a>
+    <span class="micro">Open Data Labs · Austin, TX</span>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
 
 <script>
-(async () => {
-  const el = document.getElementById('actors');
-  try {
-    const r = await fetch('https://api.apify.com/v2/store?username=opendatalabs&limit=100');
-    const { data } = await r.json();
-    const items = (data.items || []).sort((a, b) => a.title.localeCompare(b.title));
-    if (!items.length) { el.innerHTML = '<p class="empty">No public Actors yet.</p>'; return; }
-    el.innerHTML = items.map((a) => {
-      const ev = a.currentPricingInfo?.pricingPerEvent?.actorChargeEvents || {};
-      const primaryKey = Object.keys(ev).find((k) => ev[k].isPrimaryEvent) || Object.keys(ev).find((k) => k !== 'apify-actor-start');
-      const primary = primaryKey ? ev[primaryKey] : null;
-      const price = primary
-        ? `$${(primary.eventPriceUsd * 1000).toFixed(2)} <small>per 1,000 ${escapeHtml(plural(primary.eventTitle || primaryKey))}</small>`
-        : '<small>See pricing on Apify</small>';
-      return `
-        <article class="card">
-          <h3>${escapeHtml(a.title)}</h3>
-          <p>${escapeHtml(a.description || '')}</p>
-          <div class="price">${price}</div>
-          <div class="meta">${a.stats?.totalUsers ?? 0} users · ${a.stats?.totalRuns ?? 0} runs</div>
-          <a class="btn" href="https://apify.com/${a.username}/${a.name}">Open on Apify Store</a>
-        </article>`;
-    }).join('');
-  } catch (e) {
-    el.innerHTML = '<p class="empty">Could not load the catalog. Visit <a href="https://apify.com/opendatalabs">apify.com/opendatalabs</a>.</p>';
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const plural = (s) => { s = String(s).toLowerCase(); return /[^aeiou]y$/.test(s) ? s.slice(0, -1) + 'ies' : s + 's'; };
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Hash router for the three views.
+  const views = ['actors', 'apps', 'about'];
+  const titles = { actors: 'Open Data Labs', apps: 'Desktop tools · Open Data Labs', about: 'About · Open Data Labs' };
+  function show(name) {
+    if (!views.includes(name)) name = 'actors';
+    views.forEach((v) => {
+      $('#view-' + v).classList.toggle('active', v === name);
+      $(`.tabs [data-view="${v}"]`).setAttribute('aria-selected', String(v === name));
+    });
+    document.title = titles[name];
+    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
   }
-  function plural(s) { s = String(s).toLowerCase(); return /[^aeiou]y$/.test(s) ? s.slice(0, -1) + 'ies' : s + 's'; }
-  function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  document.querySelectorAll('.tabs [data-view]').forEach((b) => b.addEventListener('click', () => { location.hash = b.dataset.view; }));
+  addEventListener('hashchange', () => show(location.hash.slice(1)));
+  show(location.hash.slice(1));
+
+  // Animated counters, Datum StatTile style.
+  function count(el, to, fmt) {
+    const from = 0, dur = reduced ? 0 : 420, start = performance.now();
+    const step = (t) => {
+      const k = dur ? Math.min(1, (t - start) / dur) : 1;
+      const e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(Math.round(from + (to - from) * e));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  const num = (n) => n.toLocaleString('en-US');
+
+  // Roadmap: candidate sources under evaluation. Not products.
+  const roadmap = [
+    { t: 'State DOT bid tabulations', d: 'Awarded unit prices and engineer’s estimates from state DOT lettings, normalized across states.' },
+    { t: 'Local procurement portals', d: 'Bonfire, PlanetBids, OpenGov and DemandStar agency portals, folded into the solicitation schema.' },
+    { t: 'Planning commission agendas', d: 'Pre-permit project intel from public council and planning agendas.' },
+  ];
+  $('#roadmap-actors').innerHTML = roadmap.map((r) => `
+    <article class="card"><div class="head"><h3>${esc(r.t)}</h3></div><p>${esc(r.d)}</p><div><span class="chip eval">EVALUATING</span></div></article>`).join('');
+
+  // Apps: categories only until a tool has a release build.
+  const apps = [
+    { t: 'Estimating workbench', d: 'Takeoff, catalog pricing, and proposal assembly for low-voltage bids, in one local database.' },
+    { t: 'Shop drawings and as-builts', d: 'Turn field data into submittal-ready drawing sets without a CAD seat.' },
+    { t: 'Pathway markup', d: 'Mark cable pathways and closets on plan sheets and export a clean, sharable set.' },
+  ];
+  $('#apps').innerHTML = apps.map((a) => `
+    <article class="card"><div class="head"><h3>${esc(a.t)}</h3></div><p>${esc(a.d)}</p><div class="meta"><span>Windows desktop</span></div><div><span class="chip dev">IN DEVELOPMENT</span></div></article>`).join('');
+
+  // Live catalog from Apify Store.
+  (async () => {
+    const grid = $('#actors'), live = $('#live'), toast = $('#toast');
+    try {
+      const r = await fetch('https://api.apify.com/v2/store?username=opendatalabs&limit=100');
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const { data } = await r.json();
+      const items = (data.items || []).sort((a, b) => a.title.localeCompare(b.title));
+      // The Store list omits icons; the public per-Actor endpoint has them.
+      await Promise.all(items.map(async (a) => {
+        try { const d = await (await fetch(`https://api.apify.com/v2/acts/${a.username}~${a.name}`)).json(); a.pictureUrl = d.data?.pictureUrl || null; a.modifiedAt = d.data?.modifiedAt || null; } catch (_) { a.pictureUrl = null; }
+      }));
+      live.innerHTML = `<i></i><span>${items.length} ACTOR${items.length === 1 ? '' : 'S'} LIVE</span>`;
+      if (!items.length) { grid.innerHTML = '<div class="empty">No public Actors yet.</div>'; return; }
+
+      let runs = 0, users = 0, minPrice = Infinity;
+      grid.innerHTML = items.map((a) => {
+        const ev = a.currentPricingInfo?.pricingPerEvent?.actorChargeEvents || {};
+        const key = Object.keys(ev).find((k) => ev[k].isPrimaryEvent) || Object.keys(ev).find((k) => k !== 'apify-actor-start');
+        const p = key ? ev[key] : null;
+        runs += a.stats?.totalRuns || 0; users += a.stats?.totalUsers || 0;
+        if (p) minPrice = Math.min(minPrice, p.eventPriceUsd * 1000);
+        const price = p ? `<b>$${(p.eventPriceUsd * 1000).toFixed(2)}</b><span>per 1,000 ${esc(plural(p.eventTitle || key))}</span>` : `<span>see pricing on Apify</span>`;
+        const tile = a.pictureUrl ? `<img src="${esc(a.pictureUrl)}" alt="">` : esc(a.title.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase());
+        const modified = a.modifiedAt ? new Date(a.modifiedAt).toISOString().slice(0, 10) : '';
+        return `
+          <article class="card">
+            <div class="head"><div class="tile">${tile}</div><h3>${esc(a.title)}</h3></div>
+            <div><span class="chip live"><i></i>LIVE</span></div>
+            <p>${esc(a.description || '')}</p>
+            <div class="price">${price}</div>
+            <div class="meta"><span>${num(a.stats?.totalUsers ?? 0)} users</span><span>${num(a.stats?.totalRuns ?? 0)} runs</span>${modified ? `<span>updated ${modified}</span>` : ''}</div>
+            <div class="actions">
+              <a class="btn primary" href="https://apify.com/${esc(a.username)}/${esc(a.name)}">Open on Apify Store</a>
+              <a class="btn ghost" href="https://apify.com/${esc(a.username)}/${esc(a.name)}/api">API</a>
+            </div>
+          </article>`;
+      }).join('');
+
+      count($('[data-count="actors"]'), items.length, num);
+      count($('[data-count="runs"]'), runs, num);
+      count($('[data-count="users"]'), users, num);
+      if (isFinite(minPrice)) count($('[data-count="minprice"]'), Math.round(minPrice * 100), (v) => '$' + (v / 100).toFixed(2));
+    } catch (e) {
+      live.innerHTML = '<i></i><span>CATALOG OFFLINE</span>';
+      grid.innerHTML = '<div class="empty">Could not load the catalog. Visit <a href="https://apify.com/opendatalabs">apify.com/opendatalabs</a>.</div>';
+      toast.textContent = 'Apify Store API unreachable: ' + e.message; toast.style.display = 'block';
+    }
+  })();
 })();
 </script>
 </body>
