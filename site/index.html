@@ -81,7 +81,7 @@
       const primaryKey = Object.keys(ev).find((k) => ev[k].isPrimaryEvent) || Object.keys(ev).find((k) => k !== 'apify-actor-start');
       const primary = primaryKey ? ev[primaryKey] : null;
       const price = primary
-        ? `$${(primary.eventPriceUsd * 1000).toFixed(2)} <small>per 1,000 ${escapeHtml(primary.eventTitle || primaryKey).toLowerCase()}s</small>`
+        ? `$${(primary.eventPriceUsd * 1000).toFixed(2)} <small>per 1,000 ${escapeHtml(plural(primary.eventTitle || primaryKey))}</small>`
         : '<small>See pricing on Apify</small>';
       return `
         <article class="card">
@@ -95,6 +95,7 @@
   } catch (e) {
     el.innerHTML = '<p class="empty">Could not load the catalog. Visit <a href="https://apify.com/opendatalabs">apify.com/opendatalabs</a>.</p>';
   }
+  function plural(s) { s = String(s).toLowerCase(); return /[^aeiou]y$/.test(s) ? s.slice(0, -1) + 'ies' : s + 's'; }
   function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 })();
 </script>
