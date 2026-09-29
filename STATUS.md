@@ -12,14 +12,14 @@
 ## Blockers only the account owner can clear (Apify Console)
 1. DONE 2026-09-29: public profile (name, README bio, GitHub link, "publicly visible" on, contact email hidden) and username `opendatalabs`.
 2. DONE 2026-09-29: billing details and a Visa payment method are on file.
-3. Payout beneficiary: "Set up monetization" on any actor's Publishing tab opens a beneficiary form (personal name, address, PayPal email or Wise/bank) that needs ID verification. Pay-per-event pricing cannot be entered until this is saved and verified. Owner must fill this; Claude is blocked from entering payout details.
+3. DONE 2026-09-29: payout beneficiary saved (PayPal), identity verified.
+4. DONE 2026-09-29: pay-per-event pricing set and verified via `apify actors info` on all four actors (grants `opportunity` $0.01, permits `permit` $0.006, procurement `solicitation` $0.015, podcasts `show` $0.02 + `episode` $0.0005, plus `apify-actor-start` $0.00005 on each). The synthetic `apify-default-dataset-item` event was removed on every actor because the code already charges explicitly per record.
 
-## Next steps after those, in order
-1. Per actor: Publishing tab > Monetization > Pay per event > add the events and prices from `PUBLISH.md` > save. Display information and input schema already show green checks.
-2. Publish to Store, per actor.
-3. Set `APIFY_TOKEN` in the Claude Code web routine's environment so the weekly job can push fixes.
-4. Optional: Creator Plan so free-tier runs do not cost compute.
-5. Watch the Issues tab on each actor and answer within a business day; response time feeds Store ranking.
+## Next steps, in order
+1. Publish to Store, per actor (green "Publish on Store" button on each Publishing tab). Everything above it is complete. Owner decision.
+2. Set `APIFY_TOKEN` in the Claude Code web routine's environment so the weekly job can push fixes.
+3. Optional: Creator Plan so free-tier runs do not cost compute.
+4. Watch the Issues tab on each actor and answer within a business day; response time feeds Store ranking.
 
 ## Decisions already made
 - Non-industry only. Public government and directory data. No login walls, no captcha evasion, no personal data.

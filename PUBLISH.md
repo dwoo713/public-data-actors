@@ -32,6 +32,12 @@ npm run push -- grants-gov-opportunities
 
 Event names must match exactly; an unregistered event silently charges nothing.
 
+Notes from the first setup (2026-09-29):
+- The wizard pre-adds `apify-actor-start` ($0.00005, keep it) and `apify-default-dataset-item` ($0.00001). Delete the dataset-item event on every actor: the code already calls `Actor.charge` once per record, so leaving it would double-charge.
+- Set the custom record event as the Primary event on step 2.
+- Monetization is gated behind billing details, a payment method, a payout beneficiary (PayPal or Wise) and identity verification. The actor's Publishing tab can show a stale "Billing details not set" banner until reloaded.
+- `.actor/actor.json` descriptions must be 300 characters or fewer or `apify push` rejects them.
+
 ## Maintenance loop
 
 A scheduled Claude routine runs `npm run smoke` weekly, fixes broken selectors, re-runs the smoke test, and pushes the fix. Issues opened by users on the Store are answered within one business day, because response time feeds the Actor quality score that drives Store ranking.
