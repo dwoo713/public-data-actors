@@ -1,0 +1,24 @@
+{
+  "actorSpecification": 1,
+  "fields": {},
+  "views": {
+    "overview": {
+      "title": "Solicitations",
+      "transformation": { "fields": ["state", "solicitationNumber", "title", "agency", "solicitationType", "postedDate", "closeDate", "contactName", "sourceUrl"] },
+      "display": {
+        "component": "table",
+        "properties": {
+          "state": { "label": "State", "format": "text" },
+          "solicitationNumber": { "label": "Number", "format": "text" },
+          "title": { "label": "Title", "format": "text" },
+          "agency": { "label": "Agency", "format": "text" },
+          "solicitationType": { "label": "Type", "format": "text" },
+          "postedDate": { "label": "Posted", "format": "text" },
+          "closeDate": { "label": "Closes", "format": "text" },
+          "contactName": { "label": "Contact", "format": "text" },
+          "sourceUrl": { "label": "Link", "format": "link" }
+        }
+      }
+    }
+  }
+}

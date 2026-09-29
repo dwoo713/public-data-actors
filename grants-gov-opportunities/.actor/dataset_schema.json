@@ -1,0 +1,24 @@
+{
+  "actorSpecification": 1,
+  "fields": {},
+  "views": {
+    "overview": {
+      "title": "Opportunities",
+      "transformation": { "fields": ["opportunityNumber", "title", "agencyName", "status", "postedDate", "closeDate", "awardCeiling", "numberOfAwards", "url"] },
+      "display": {
+        "component": "table",
+        "properties": {
+          "opportunityNumber": { "label": "Number", "format": "text" },
+          "title": { "label": "Title", "format": "text" },
+          "agencyName": { "label": "Agency", "format": "text" },
+          "status": { "label": "Status", "format": "text" },
+          "postedDate": { "label": "Posted", "format": "text" },
+          "closeDate": { "label": "Closes", "format": "text" },
+          "awardCeiling": { "label": "Award ceiling", "format": "number" },
+          "numberOfAwards": { "label": "Awards", "format": "number" },
+          "url": { "label": "Link", "format": "link" }
+        }
+      }
+    }
+  }
+}

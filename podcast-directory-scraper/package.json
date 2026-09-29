@@ -1,0 +1,10 @@
+{
+  "name": "podcast-directory-scraper",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Apify Actor: Apple Podcasts directory and RSS episode scraper",
+  "engines": { "node": ">=22" },
+  "dependencies": { "apify": "^3.7.0", "fast-xml-parser": "^5.2.0" },
+  "scripts": { "start": "node ./src/main.js" },
+  "license": "ISC"
+}

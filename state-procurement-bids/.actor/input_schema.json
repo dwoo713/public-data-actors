@@ -1,0 +1,63 @@
+{
+  "title": "State Procurement Bids Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "portals": {
+      "title": "Portals",
+      "type": "array",
+      "description": "Which state procurement portals to scrape. Each portal is checked against its robots.txt before any request is made and skipped if crawling is disallowed or the robots.txt is unreachable.",
+      "editor": "select",
+      "items": {
+        "type": "string",
+        "enum": ["ma-commbuys", "nj-njstart", "or-oregonbuys", "ga-gpr", "ia-bidopportunities", "la-lapac"],
+        "enumTitles": [
+          "Massachusetts - COMMBUYS",
+          "New Jersey - NJSTART",
+          "Oregon - OregonBuys",
+          "Georgia - Georgia Procurement Registry (GPR)",
+          "Iowa - State of Iowa Bid Opportunities",
+          "Louisiana - LaPAC"
+        ]
+      },
+      "prefill": ["ma-commbuys", "nj-njstart", "or-oregonbuys", "ga-gpr", "ia-bidopportunities", "la-lapac"],
+      "default": ["ma-commbuys", "nj-njstart", "or-oregonbuys", "ga-gpr", "ia-bidopportunities", "la-lapac"]
+    },
+    "keyword": {
+      "title": "Keyword",
+      "type": "string",
+      "description": "Optional free-text filter. Sent to the portal's own search where one exists (COMMBUYS/NJSTART/OregonBuys description search, GPR title search, Iowa keyword search) and applied to the title otherwise (LaPAC). Leave empty to list every open solicitation.",
+      "editor": "textfield"
+    },
+    "postedAfter": {
+      "title": "Posted on or after",
+      "type": "string",
+      "description": "Optional ISO date (YYYY-MM-DD). Solicitations with a known posted date before this day are skipped.",
+      "editor": "textfield",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "closesAfter": {
+      "title": "Closes on or after",
+      "type": "string",
+      "description": "ISO date (YYYY-MM-DD). Solicitations whose close date is before this day are skipped. Defaults to today, so only solicitations that are still open are returned. Set it explicitly to include recently closed ones on portals that still list them.",
+      "editor": "textfield",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "maxResultsPerPortal": {
+      "title": "Maximum results per portal",
+      "type": "integer",
+      "description": "Stop each portal after this many solicitations. Each solicitation is one charged result.",
+      "minimum": 1,
+      "maximum": 5000,
+      "default": 200,
+      "prefill": 200
+    },
+    "includeDescription": {
+      "title": "Fetch detail pages",
+      "type": "boolean",
+      "description": "Fetch each solicitation's public detail page to fill description, attachments, buyer contact, NIGP/UNSPSC codes and posted date. Turn off for a faster list-only run at the same per-result price.",
+      "default": true
+    }
+  },
+  "required": []
+}

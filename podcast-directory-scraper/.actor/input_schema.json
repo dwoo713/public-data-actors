@@ -1,0 +1,73 @@
+{
+  "title": "Podcast Directory Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "searchTerms": {
+      "title": "Search terms",
+      "type": "array",
+      "description": "Keywords to search in the Apple Podcasts directory, one per line. Each term returns up to 200 shows ranked by Apple's relevance. Combine with Podcast IDs and Feed URLs as needed.",
+      "editor": "stringList",
+      "prefill": ["construction business"]
+    },
+    "podcastIds": {
+      "title": "Apple podcast IDs",
+      "type": "array",
+      "description": "Optional Apple Podcasts collection IDs to look up directly, e.g. 1821811389 (the number after /id in a podcasts.apple.com URL).",
+      "editor": "stringList"
+    },
+    "feedUrls": {
+      "title": "RSS feed URLs",
+      "type": "array",
+      "description": "Optional podcast RSS feed URLs to parse directly, without going through the Apple directory. Show metadata is taken from the feed itself.",
+      "editor": "stringList"
+    },
+    "country": {
+      "title": "Country",
+      "type": "string",
+      "description": "Two-letter ISO country code of the Apple Podcasts storefront to search, e.g. US, GB, CA, AU, DE.",
+      "editor": "textfield",
+      "default": "US",
+      "prefill": "US",
+      "pattern": "^[A-Za-z]{2}$"
+    },
+    "genreId": {
+      "title": "Genre ID",
+      "type": "string",
+      "description": "Optional Apple Podcasts genre ID to restrict search results, e.g. 1321 (Business), 1318 (Technology), 1304 (Education), 1489 (News), 1324 (Society & Culture).",
+      "editor": "textfield"
+    },
+    "maxShows": {
+      "title": "Maximum shows",
+      "type": "integer",
+      "description": "Stop after this many unique shows. Each show is one charged 'show' event.",
+      "minimum": 1,
+      "maximum": 5000,
+      "default": 50,
+      "prefill": 50
+    },
+    "includeEpisodes": {
+      "title": "Include episodes",
+      "type": "boolean",
+      "description": "Fetch each show's RSS feed and include an episodes array with audio URLs, durations and publish dates. Each included episode is one charged 'episode' event.",
+      "default": true
+    },
+    "maxEpisodesPerShow": {
+      "title": "Maximum episodes per show",
+      "type": "integer",
+      "description": "Newest episodes are kept first. Use 0 to include every episode in the feed.",
+      "minimum": 0,
+      "maximum": 10000,
+      "default": 50,
+      "prefill": 50
+    },
+    "episodesPublishedAfter": {
+      "title": "Episodes published on or after",
+      "type": "string",
+      "description": "Optional ISO date (YYYY-MM-DD). Episodes published before this date are skipped and not charged.",
+      "editor": "textfield",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    }
+  },
+  "required": []
+}

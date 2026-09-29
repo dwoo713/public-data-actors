@@ -1,0 +1,10 @@
+{
+  "name": "state-procurement-bids",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Apify Actor: open RFP/IFB/RFQ solicitations from public US state procurement portals",
+  "engines": { "node": ">=22" },
+  "dependencies": { "apify": "^3.7.0", "cheerio": "^1.0.0" },
+  "scripts": { "start": "node ./src/main.js" },
+  "license": "ISC"
+}

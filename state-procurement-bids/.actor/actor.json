@@ -1,0 +1,12 @@
+{
+  "actorSpecification": 1,
+  "name": "state-procurement-bids",
+  "title": "State Procurement Bids Scraper (RFP, IFB, RFQ)",
+  "description": "Collect currently open public-sector solicitations (RFPs, IFBs, RFQs, RFIs) from public US state procurement portals (Massachusetts COMMBUYS, New Jersey NJSTART, OregonBuys, Georgia GPR, Iowa, Louisiana LaPAC) as one normalized JSON schema with agency, dates, NIGP/UNSPSC codes, buyer contact and attachment links. No login, robots.txt respected, pay per solicitation.",
+  "version": "0.1",
+  "buildTag": "latest",
+  "meta": { "templateId": "js-empty" },
+  "inputSchema": "./input_schema.json",
+  "storages": { "dataset": "./dataset_schema.json" },
+  "dockerfile": "../Dockerfile"
+}

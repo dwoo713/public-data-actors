@@ -1,0 +1,23 @@
+{
+  "actorSpecification": 1,
+  "fields": {},
+  "views": {
+    "overview": {
+      "title": "Shows",
+      "transformation": { "fields": ["artworkUrl", "title", "publisher", "episodeCount", "latestEpisodeDate", "language", "appleUrl", "feedUrl"] },
+      "display": {
+        "component": "table",
+        "properties": {
+          "artworkUrl": { "label": "Artwork", "format": "image" },
+          "title": { "label": "Title", "format": "text" },
+          "publisher": { "label": "Publisher", "format": "text" },
+          "episodeCount": { "label": "Episodes", "format": "number" },
+          "latestEpisodeDate": { "label": "Latest episode", "format": "text" },
+          "language": { "label": "Language", "format": "text" },
+          "appleUrl": { "label": "Apple Podcasts", "format": "link" },
+          "feedUrl": { "label": "RSS feed", "format": "link" }
+        }
+      }
+    }
+  }
+}

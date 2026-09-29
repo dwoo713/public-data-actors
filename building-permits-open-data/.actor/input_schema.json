@@ -1,0 +1,90 @@
+{
+  "title": "Building Permits Open Data Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "cities": {
+      "title": "Cities / counties",
+      "type": "array",
+      "description": "Which built-in Socrata permit datasets to pull. Each is processed one after another. Leave empty if you only want to use a custom portal below.",
+      "editor": "select",
+      "items": {
+        "type": "string",
+        "enum": ["chicago", "nyc", "nyc_bis", "sf", "la", "seattle", "austin", "cincinnati", "mesa", "montgomery_county_md_residential", "montgomery_county_md_commercial", "baton_rouge", "marin_county", "cambridge"],
+        "enumTitles": [
+          "Chicago, IL (Building Permits)",
+          "New York City, NY (DOB NOW: Build - Approved Permits)",
+          "New York City, NY (legacy DOB BIS Permit Issuance)",
+          "San Francisco, CA (Building Permits)",
+          "Los Angeles, CA (Building Permits Issued 2020-present)",
+          "Seattle, WA (Building Permits)",
+          "Austin, TX (Issued Construction Permits)",
+          "Cincinnati, OH (Building Permits)",
+          "Mesa, AZ (Building Permits)",
+          "Montgomery County, MD (Residential Permits)",
+          "Montgomery County, MD (Commercial Permits)",
+          "East Baton Rouge Parish, LA (Building Permits)",
+          "Marin County, CA (Building Permits)",
+          "Cambridge, MA (Building Permits: Addition/Alteration)"
+        ]
+      },
+      "prefill": ["chicago", "nyc"],
+      "default": ["chicago", "nyc"]
+    },
+    "custom": {
+      "title": "Custom Socrata portal",
+      "type": "object",
+      "description": "Optional. Pull any other Socrata dataset: {\"domain\": \"data.example.gov\", \"datasetId\": \"abcd-1234\", \"fieldMap\": {\"permitNumber\": \"permit_no\", \"issuedDate\": \"issue_date\", \"permitType\": \"type\", \"estimatedCost\": \"valuation\", \"address\": \"site_address\"}}. fieldMap keys are normalized output field names, values are the dataset's column names. Unmapped columns are passed through (except columns that look like personal owner/applicant data). issuedDate is needed for date filters and ordering.",
+      "editor": "json"
+    },
+    "issuedAfter": {
+      "title": "Issued on or after",
+      "type": "string",
+      "description": "Optional ISO date (YYYY-MM-DD). Only permits issued on or after this date.",
+      "editor": "textfield",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "issuedBefore": {
+      "title": "Issued before",
+      "type": "string",
+      "description": "Optional ISO date (YYYY-MM-DD). Only permits issued before this date (exclusive).",
+      "editor": "textfield",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "permitTypeContains": {
+      "title": "Permit type contains",
+      "type": "string",
+      "description": "Optional, case-insensitive substring match on the permit type field, e.g. \"new construction\", \"demolition\", \"solar\", \"plumbing\".",
+      "editor": "textfield"
+    },
+    "minEstimatedCost": {
+      "title": "Minimum estimated cost",
+      "type": "number",
+      "description": "Optional. Skip permits whose declared valuation / estimated cost is below this amount (USD). Datasets without a cost field ignore this filter.",
+      "minimum": 0
+    },
+    "maxResultsPerCity": {
+      "title": "Maximum permits per city",
+      "type": "integer",
+      "description": "Stop each city after this many permits. Each permit is one charged result.",
+      "minimum": 1,
+      "maximum": 100000,
+      "default": 500,
+      "prefill": 500
+    },
+    "includeRaw": {
+      "title": "Include raw record",
+      "type": "boolean",
+      "description": "Attach the untouched original portal record under `raw`. Note: raw records may contain fields the normalized output deliberately omits (see Data privacy in the README).",
+      "default": false
+    },
+    "appToken": {
+      "title": "Socrata app token",
+      "type": "string",
+      "description": "Optional. A free Socrata application token, sent as X-App-Token for higher rate limits. Works without one.",
+      "editor": "textfield",
+      "isSecret": true
+    }
+  },
+  "required": []
+}

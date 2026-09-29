@@ -1,0 +1,1 @@
+{ "cities": ["chicago", "nyc", "sf"], "maxResultsPerCity": 3, "includeRaw": false, "__minRecords": 6 }

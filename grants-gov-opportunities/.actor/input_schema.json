@@ -1,0 +1,89 @@
+{
+  "title": "Grants.gov Funding Opportunity Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "keyword": {
+      "title": "Keyword",
+      "type": "string",
+      "description": "Free-text search, same as the Grants.gov search box. Leave empty to list every opportunity matching the other filters.",
+      "editor": "textfield",
+      "prefill": "broadband"
+    },
+    "oppStatuses": {
+      "title": "Opportunity status",
+      "type": "array",
+      "description": "Which opportunity statuses to include.",
+      "editor": "select",
+      "items": { "type": "string", "enum": ["forecasted", "posted", "closed", "archived"], "enumTitles": ["Forecasted", "Posted (open)", "Closed", "Archived"] },
+      "prefill": ["posted"],
+      "default": ["posted"]
+    },
+    "agencies": {
+      "title": "Agency codes",
+      "type": "array",
+      "description": "Optional Grants.gov agency codes, e.g. HHS, USDA-NIFA, DOC-EDA, DOE. Sub-agency codes are accepted.",
+      "editor": "stringList"
+    },
+    "fundingCategories": {
+      "title": "Funding category codes",
+      "type": "array",
+      "description": "Optional category codes, e.g. AG (Agriculture), ED (Education), EN (Energy), HL (Health), ST (Science & Technology), CD (Community Development), IS (Information & Statistics).",
+      "editor": "stringList"
+    },
+    "eligibilities": {
+      "title": "Eligibility codes",
+      "type": "array",
+      "description": "Optional applicant eligibility codes, e.g. 00 (State governments), 01 (County), 02 (City/township), 06 (Public higher ed), 12 (Nonprofits with 501c3), 22 (For-profit other than small business), 23 (Small businesses), 25 (Others).",
+      "editor": "stringList"
+    },
+    "fundingInstruments": {
+      "title": "Funding instrument codes",
+      "type": "array",
+      "description": "Optional: G (Grant), CA (Cooperative Agreement), PC (Procurement Contract), O (Other).",
+      "editor": "stringList"
+    },
+    "cfda": {
+      "title": "Assistance listing (CFDA) number",
+      "type": "string",
+      "description": "Optional, e.g. 11.029 or 93.213.",
+      "editor": "textfield"
+    },
+    "postedAfter": {
+      "title": "Posted on or after",
+      "type": "string",
+      "description": "Optional ISO date (YYYY-MM-DD). Opportunities opened before this date are skipped.",
+      "editor": "textfield",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "closesAfter": {
+      "title": "Closes on or after",
+      "type": "string",
+      "description": "Optional ISO date (YYYY-MM-DD). Skip opportunities whose close date is before this date. Useful to drop deadlines that already passed.",
+      "editor": "textfield",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "maxResults": {
+      "title": "Maximum opportunities",
+      "type": "integer",
+      "description": "Stop after this many opportunities. Each opportunity is one charged result.",
+      "minimum": 1,
+      "maximum": 10000,
+      "default": 100,
+      "prefill": 100
+    },
+    "includeDetails": {
+      "title": "Fetch full details",
+      "type": "boolean",
+      "description": "Fetch the full synopsis for every opportunity (description, eligibility text, award ceiling/floor, number of awards, cost sharing, contact, attachments). Turn off for a faster list-only run with the same per-result price.",
+      "default": true
+    },
+    "includeDescriptionHtml": {
+      "title": "Include description as HTML",
+      "type": "boolean",
+      "description": "Also include the raw HTML synopsis in addition to the plain-text version.",
+      "default": false
+    }
+  },
+  "required": []
+}

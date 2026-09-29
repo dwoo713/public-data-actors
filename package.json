@@ -1,0 +1,13 @@
+{
+  "name": "public-data-actors",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Portfolio of pay-per-event Apify Actors for public business and government data.",
+  "engines": { "node": ">=22" },
+  "devDependencies": { "apify-cli": "^1.10.0" },
+  "scripts": {
+    "smoke": "node scripts/smoke-test.mjs",
+    "push": "node scripts/push-all.mjs"
+  }
+}

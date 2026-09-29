@@ -1,0 +1,10 @@
+{
+  "name": "building-permits-open-data",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Apify Actor: building permits from US city/county Socrata open-data portals",
+  "engines": { "node": ">=22" },
+  "dependencies": { "apify": "^3.7.0" },
+  "scripts": { "start": "node ./src/main.js" },
+  "license": "ISC"
+}

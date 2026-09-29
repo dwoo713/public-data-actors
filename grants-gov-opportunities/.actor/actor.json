@@ -1,0 +1,12 @@
+{
+  "actorSpecification": 1,
+  "name": "grants-gov-opportunities",
+  "title": "Grants.gov Funding Opportunity Scraper",
+  "description": "Search and extract federal grant opportunities from Grants.gov with full synopsis, eligibility, award amounts, deadlines, CFDA numbers, agency contacts, and attachment download links. Clean JSON, no login, pay per opportunity.",
+  "version": "0.1",
+  "buildTag": "latest",
+  "meta": { "templateId": "js-empty" },
+  "inputSchema": "./input_schema.json",
+  "storages": { "dataset": "./dataset_schema.json" },
+  "dockerfile": "../Dockerfile"
+}

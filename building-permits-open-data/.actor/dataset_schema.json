@@ -1,0 +1,25 @@
+{
+  "actorSpecification": 1,
+  "fields": {},
+  "views": {
+    "overview": {
+      "title": "Permits",
+      "transformation": { "fields": ["permitNumber", "sourceKey", "permitType", "status", "address", "city", "issuedDate", "estimatedCost", "contractorName", "recordUrl"] },
+      "display": {
+        "component": "table",
+        "properties": {
+          "permitNumber": { "label": "Permit #", "format": "text" },
+          "sourceKey": { "label": "Source", "format": "text" },
+          "permitType": { "label": "Type", "format": "text" },
+          "status": { "label": "Status", "format": "text" },
+          "address": { "label": "Address", "format": "text" },
+          "city": { "label": "City", "format": "text" },
+          "issuedDate": { "label": "Issued", "format": "text" },
+          "estimatedCost": { "label": "Est. cost", "format": "number" },
+          "contractorName": { "label": "Contractor", "format": "text" },
+          "recordUrl": { "label": "Record", "format": "link" }
+        }
+      }
+    }
+  }
+}
