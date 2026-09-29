@@ -1,7 +1,7 @@
 # Status (2026-09-29)
 
 ## Where things stand
-- Four actors built, smoke-tested against live sources, committed on `main`. All four are pushed to the Apify account `proper_heron` and built successfully (build 0.1.1 each), but none are on the Store yet.
+- Four actors built, smoke-tested against live sources, committed on `main`. All four are pushed to the Apify account `opendatalabs` (renamed from the auto-generated `proper_heron` on 2026-09-29) and built successfully (build 0.1.1 each), but none are on the Store yet.
   - building-permits-open-data: https://console.apify.com/actors/ydMfwVpSQSyggNgge
   - grants-gov-opportunities: https://console.apify.com/actors/OxxtsgwNPczpmxrCv
   - podcast-directory-scraper: https://console.apify.com/actors/T00ogoqbyUoq1UczJ
@@ -10,7 +10,7 @@
 - Weekly health-check routine exists in Claude Code on the web (Mondays 6:47 AM Central). It clones this repo, runs `npm run smoke`, fixes breakage, pushes to `main`, and pushes to Apify only if `APIFY_TOKEN` is set in the cloud environment.
 
 ## Blockers only the account owner can clear (Apify Console)
-1. Settings > Account: fill first/last name, set the username (auto-generated `proper_heron` is what the Store will show), and turn on "Make profile publicly visible". Publishing is refused until the profile is public.
+1. DONE 2026-09-29: public profile (name, README bio, GitHub link, "publicly visible" on, contact email hidden) and username `opendatalabs`.
 2. Billing: add billing details and a payment method. The Monetization panel on every actor is disabled until this is done.
 3. Optional: Settings > Payouts (PayPal or bank wire) so earnings can actually be paid out.
 
