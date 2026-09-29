@@ -2,9 +2,10 @@
 // Usage: node scripts/smoke-test.mjs [actor-name ...]
 import { readdirSync, existsSync, readFileSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const wanted = process.argv.slice(2);
 const actors = readdirSync(root, { withFileTypes: true })
     .filter((d) => d.isDirectory() && existsSync(join(root, d.name, '.actor/actor.json')))
@@ -20,7 +21,7 @@ for (const name of actors) {
     rmSync(join(storage, 'datasets'), { recursive: true, force: true });
     mkdirSync(join(storage, 'key_value_stores/default'), { recursive: true });
     writeFileSync(join(storage, 'key_value_stores/default/INPUT.json'), readFileSync(smokeInput));
-    if (!existsSync(join(dir, 'node_modules'))) spawnSync('npm', ['install', '--silent'], { cwd: dir, stdio: 'inherit' });
+    if (!existsSync(join(dir, 'node_modules'))) spawnSync('npm', ['install', '--silent'], { cwd: dir, stdio: 'inherit', shell: process.platform === 'win32' });
     const started = Date.now();
     const run = spawnSync('node', ['src/main.js'], { cwd: dir, env: { ...process.env, APIFY_LOCAL_STORAGE_DIR: storage, CRAWLEE_STORAGE_DIR: storage, APIFY_LOG_LEVEL: 'WARNING' }, encoding: 'utf8', timeout: 10 * 60 * 1000 });
     const dsDir = join(storage, 'datasets/default');
