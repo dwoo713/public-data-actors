@@ -1,0 +1,12 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Grants.gov opportunities",
+  "properties": {
+    "opportunities": {
+      "type": "string",
+      "title": "Opportunities",
+      "description": "One record per Grants.gov funding opportunity: number, title, agency, status, synopsis, eligibility, award amounts, dates, CFDA numbers, contacts and attachment links.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    }
+  }
+}

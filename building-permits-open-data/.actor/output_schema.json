@@ -1,0 +1,12 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Building permits",
+  "properties": {
+    "permits": {
+      "type": "string",
+      "title": "Permits",
+      "description": "One record per building permit from a city or county Socrata open-data portal, normalized to a single schema: permit number, type, status, address, coordinates, dates, valuation and contractor company.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "State procurement solicitations",
+  "properties": {
+    "solicitations": {
+      "type": "string",
+      "title": "Solicitations",
+      "description": "One record per open public-sector solicitation (RFP, IFB, RFQ, RFI) from a US state procurement portal: state, number, title, agency, type, dates, NIGP/UNSPSC codes, buyer contact and attachment links.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    },
+    "summary": {
+      "type": "string",
+      "title": "Run summary",
+      "description": "Per-portal counts and skip reasons for this run, stored as the SUMMARY record in the default key-value store.",
+      "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/SUMMARY"
+    }
+  }
+}

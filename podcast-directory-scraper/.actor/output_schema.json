@@ -1,0 +1,12 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Podcast shows and episodes",
+  "properties": {
+    "shows": {
+      "type": "string",
+      "title": "Shows",
+      "description": "One record per podcast show with Apple Podcasts metadata and an embedded episodes array parsed from the public RSS feed.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    }
+  }
+}

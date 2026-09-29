@@ -5,8 +5,13 @@
   "description": "Search Apple Podcasts by keyword, genre or show ID and extract show metadata plus every episode from the public RSS feed: titles, descriptions, audio URLs, durations, dates, season and episode numbers. No API key, no login, pay per show and episode.",
   "version": "0.1",
   "buildTag": "latest",
-  "meta": { "templateId": "js-empty" },
+  "meta": {
+    "templateId": "js-empty"
+  },
   "inputSchema": "./input_schema.json",
-  "storages": { "dataset": "./dataset_schema.json" },
+  "output": "./output_schema.json",
+  "storages": {
+    "dataset": "./dataset_schema.json"
+  },
   "dockerfile": "../Dockerfile"
 }
