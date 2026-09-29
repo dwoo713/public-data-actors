@@ -325,9 +325,22 @@
       const r = await fetch('https://api.apify.com/v2/store?username=jonoworks&limit=100');
       if (!r.ok) throw new Error('HTTP ' + r.status);
       const { data } = await r.json();
-      const items = (data.items || []).sort((a, b) => a.title.localeCompare(b.title));
+      let items = data.items || [];
+      if (!items.length) {
+        // Store search index can lag after a username change; read the known Actors directly.
+        const known = ['building-permits-open-data', 'grants-gov-opportunities', 'podcast-directory-scraper', 'state-procurement-bids'];
+        items = (await Promise.all(known.map(async (n) => {
+          try {
+            const d = (await (await fetch(`https://api.apify.com/v2/acts/jonoworks~${n}`)).json()).data;
+            if (!d || !d.isPublic) return null;
+            const p = (d.pricingInfos || []).at(-1);
+            return { title: d.title, name: d.name, username: d.username, description: d.description, stats: d.stats, currentPricingInfo: p, pictureUrl: d.pictureUrl, modifiedAt: d.modifiedAt };
+          } catch (_) { return null; }
+        }))).filter(Boolean);
+      }
+      items.sort((a, b) => a.title.localeCompare(b.title));
       // The Store list omits icons; the public per-Actor endpoint has them.
-      await Promise.all(items.map(async (a) => {
+      await Promise.all(items.filter((a) => a.pictureUrl === undefined).map(async (a) => {
         try { const d = await (await fetch(`https://api.apify.com/v2/acts/${a.username}~${a.name}`)).json(); a.pictureUrl = d.data?.pictureUrl || null; a.modifiedAt = d.data?.modifiedAt || null; } catch (_) { a.pictureUrl = null; }
       }));
       live.innerHTML = `<i></i><span>${items.length} ACTOR${items.length === 1 ? '' : 'S'} LIVE</span>`;
