@@ -221,11 +221,15 @@
   <!-- APPS -->
   <div class="view" id="view-apps" role="tabpanel">
     <div class="pagehead">
-      <h1>Desktop tools,<br>built for the estimating desk.</h1>
-      <p>Windows applications that grew out of daily estimating and drawing work. Nothing here is for sale yet. Each tool is listed with its real status, and a name once it has a release build.</p>
+      <h1>Desktop tools and games,<br>built after hours.</h1>
+      <p>Windows applications that grew out of daily estimating and drawing work, and Android games built for the couch. Nothing here is for sale yet. Each one is listed with its real status, and a store link once it has a release build.</p>
     </div>
     <section>
-      <div class="sechead"><h2>In development</h2><span class="micro">Status is updated with each release</span></div>
+      <div class="sechead"><h2>Android games</h2><span class="micro">Upcoming on Google Play</span></div>
+      <div class="grid" id="games"></div>
+    </section>
+    <section>
+      <div class="sechead"><h2>Desktop tools in development</h2><span class="micro">Status is updated with each release</span></div>
       <div class="grid" id="apps"></div>
     </section>
     <section>
@@ -274,7 +278,7 @@
 
   // Hash router for the three views.
   const views = ['actors', 'apps', 'about'];
-  const titles = { actors: 'JoNo Works', apps: 'Desktop tools · JoNo Works', about: 'About · JoNo Works' };
+  const titles = { actors: 'JoNo Works', apps: 'Apps and games · JoNo Works', about: 'About · JoNo Works' };
   function show(name) {
     if (!views.includes(name)) name = 'actors';
     views.forEach((v) => {
@@ -318,6 +322,12 @@
   ];
   $('#apps').innerHTML = apps.map((a) => `
     <article class="card"><div class="head"><h3>${esc(a.t)}</h3></div><p>${esc(a.d)}</p><div class="meta"><span>Windows desktop</span></div><div><span class="chip dev">IN DEVELOPMENT</span></div></article>`).join('');
+
+  const games = [
+    { t: 'Couch Court', d: 'A household small-claims court for two. Charge each other with domestic crimes, photograph the evidence, and answer under oath. An AI judge reads the indictment, calls a surprise witness from around your house, hands down a verdict and a sentence you serve tonight. Every trial is improvised, so no two couples get the same case.', m: 'Android · 2 players · one phone', s: 'UPCOMING' },
+  ];
+  $('#games').innerHTML = games.map((g) => `
+    <article class="card"><div class="head"><h3>${esc(g.t)}</h3></div><p>${esc(g.d)}</p><div class="meta"><span>${esc(g.m)}</span></div><div><span class="chip eval">${esc(g.s)}</span></div></article>`).join('');
 
   // Live catalog from Apify Store.
   (async () => {
