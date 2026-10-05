@@ -48,7 +48,8 @@ Portals that were evaluated and left out: Texas ESBD, Maryland eMMA, Pennsylvani
 | `keyword` | string | Optional text filter. Sent to the portal's own search where one exists (description search on Periscope portals, title search on GPR, keyword search on Iowa) and applied to the title on LaPAC. |
 | `postedAfter` | date | Optional ISO date. Skip solicitations with a known posted date before this day. |
 | `closesAfter` | date | ISO date, defaults to today. Skip solicitations whose close date is before this day. |
-| `maxResultsPerPortal` | integer | Stop each portal after this many solicitations (default 200). |
+| `maxResultsPerPortal` | integer | Stop each portal after this many solicitations (default 100, prefilled 25). A full pull of 200 per portal with descriptions takes 10 to 20 minutes. |
+| `maxRunSeconds` | integer | Stop cleanly once this many seconds have passed and finish with what was collected (default 0 = no extra limit). The actor always stops about 20 seconds before the platform run timeout and splits the remaining time evenly across the selected portals, so a run finishes as SUCCEEDED with partial data instead of TIMED-OUT. |
 | `includeDescription` | boolean | Fetch each detail page for description, attachments, contact and codes (default true). |
 
 Example input:
@@ -159,6 +160,8 @@ Portal terms and posting rules remain in force for how you use the data; check t
 - **Integrations**: Zapier, Make, n8n, Airtable, LangChain and more through Apify integrations.
 
 ## FAQ
+
+**Why did a portal return fewer results than `maxResultsPerPortal`?** Either the portal had fewer open solicitations, or the run's time budget for that portal ran out. The `SUMMARY` record in the key-value store says which: a portal cut short by time carries `"truncated": "time budget"`. Raise the run timeout or `maxRunSeconds`, or select fewer portals per run, to get more.
 
 **Why do results sorted by close date start with bids closing today?** `closesAfter` defaults to today and works at day granularity, so bids whose deadline is later today are included. Set `closesAfter` to tomorrow to exclude them.
 

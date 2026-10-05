@@ -8,6 +8,7 @@ import { createClient, formBody, mapWithConcurrency, MAX_CONCURRENCY_PER_PORTAL 
 import { checkRobots } from '../lib/robots.js';
 import { parseLocalDateTime, onOrAfter } from '../lib/dates.js';
 import { oneLine, truncate, elementText, classifySolicitationType, extractEmail, extractPhone, absoluteUrl, makeRecord } from '../lib/normalize.js';
+import { pastDeadline } from '../lib/deadline.js';
 
 const BASE = 'https://ssl.doas.state.ga.us';
 const HOME = `${BASE}/gpr/`;
@@ -110,7 +111,7 @@ export default {
     async robotsOk() {
         return checkRobots(createClient(), BASE, ['/gpr/', '/gpr/eventSearch', '/gpr/eventDetails']);
     },
-    async *listOpen({ keyword = '', postedAfter = null, closesAfter = null, maxResults = 200, includeDescription = true } = {}) {
+    async *listOpen({ keyword = '', postedAfter = null, closesAfter = null, maxResults = 200, includeDescription = true, deadline = Infinity } = {}) {
         const client = createClient();
         const home = await client.request(HOME); // establishes JSESSIONID
         if (/unsupported\?browser/i.test(home.url)) throw new Error('GPR rejected the user agent as an unsupported browser');
@@ -121,6 +122,7 @@ export default {
         let draw = 0;
         const seen = new Set();
         while (yielded < maxResults) {
+            if (pastDeadline(deadline)) return;
             draw += 1;
             const body = formBody({
                 draw, start, length: PAGE_SIZE,
@@ -148,7 +150,7 @@ export default {
                     && (!postedAfter || onOrAfter(parseLocalDateTime(h.postingDate ?? h.postingDateStr, TZ).iso, postedAfter));
             });
             const records = includeDescription
-                ? await mapWithConcurrency(hits, MAX_CONCURRENCY_PER_PORTAL, (h) => enrich(client, h))
+                ? await mapWithConcurrency(hits, MAX_CONCURRENCY_PER_PORTAL, (h) => (pastDeadline(deadline) ? baseRecord(h) : enrich(client, h)))
                 : hits.map(baseRecord);
             for (const rec of records) {
                 yield rec;

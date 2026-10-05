@@ -9,6 +9,7 @@ import { createClient, mapWithConcurrency, MAX_CONCURRENCY_PER_PORTAL } from '..
 import { checkRobots } from '../lib/robots.js';
 import { parseLocalDateTime, onOrAfter } from '../lib/dates.js';
 import { cleanText, oneLine, truncate, classifySolicitationType, unprotectEmails, absoluteUrl, makeRecord } from '../lib/normalize.js';
+import { pastDeadline } from '../lib/deadline.js';
 
 const BASE = 'https://wwwcfprd.doa.louisiana.gov';
 const ROOT = `${BASE}/osp/lapac/`;
@@ -155,7 +156,7 @@ export default {
     async robotsOk() {
         return checkRobots(createClient(), BASE, ['/osp/lapac/deptbids.cfm', '/osp/lapac/dspBid.cfm', '/osp/lapac/dspBidContact.cfm']);
     },
-    async *listOpen({ keyword = '', postedAfter = null, closesAfter = null, maxResults = 200, includeDescription = true } = {}) {
+    async *listOpen({ keyword = '', postedAfter = null, closesAfter = null, maxResults = 200, includeDescription = true, deadline = Infinity } = {}) {
         const client = createClient();
         const res = await client.request(`${ROOT}deptbids.cfm`);
         const $ = cheerio.load(res.text);
@@ -170,6 +171,7 @@ export default {
         let yielded = 0;
         const seen = new Set();
         for (const dept of departments) {
+            if (pastDeadline(deadline)) return;
             const listUrl = `${ROOT}dspBid.cfm?search=department&term=${dept.term}`;
             let list;
             try {
@@ -190,7 +192,7 @@ export default {
                 return true;
             });
             const records = includeDescription
-                ? await mapWithConcurrency(rows, MAX_CONCURRENCY_PER_PORTAL, (r) => enrich(client, r))
+                ? await mapWithConcurrency(rows, MAX_CONCURRENCY_PER_PORTAL, (r) => (pastDeadline(deadline) ? baseRecord(r) : enrich(client, r)))
                 : rows.map(baseRecord);
             for (const rec of records) {
                 yield rec;

@@ -8,6 +8,7 @@ import { createClient, mapWithConcurrency, MAX_CONCURRENCY_PER_PORTAL } from '..
 import { checkRobots } from '../lib/robots.js';
 import { dotNetDateToIso, onOrAfter } from '../lib/dates.js';
 import { cleanText, oneLine, truncate, elementText, classifySolicitationType, classifyAgencyType, unprotectEmails, absoluteUrl, makeRecord } from '../lib/normalize.js';
+import { pastDeadline } from '../lib/deadline.js';
 
 const BASE = 'https://bidopportunities.iowa.gov';
 const TZ = 'America/Chicago';
@@ -105,13 +106,14 @@ export default {
     async robotsOk() {
         return checkRobots(createClient(), BASE, ['/', '/Home/DT_HostedBidsSearch', '/Home/BidInfo']);
     },
-    async *listOpen({ keyword = '', postedAfter = null, closesAfter = null, maxResults = 200, includeDescription = true } = {}) {
+    async *listOpen({ keyword = '', postedAfter = null, closesAfter = null, maxResults = 200, includeDescription = true, deadline = Infinity } = {}) {
         const client = createClient();
         let start = 0;
         let yielded = 0;
         let echo = 0;
         const seen = new Set();
         for (;;) {
+            if (pastDeadline(deadline)) return;
             echo += 1;
             const url = `${BASE}/Home/DT_HostedBidsSearch?agencyId=&enteredSearchText=${encodeURIComponent(keyword ?? '')}&sEcho=${echo}&iDisplayStart=${start}&iDisplayLength=${PAGE_SIZE}`;
             const res = await client.request(url, { headers: { Accept: 'application/json, text/javascript, */*; q=0.01', 'X-Requested-With': 'XMLHttpRequest' } });
@@ -127,7 +129,7 @@ export default {
                     && (!postedAfter || onOrAfter(dotNetDateToIso(h.EffectiveDate, TZ).iso, postedAfter));
             });
             const records = includeDescription
-                ? await mapWithConcurrency(hits, MAX_CONCURRENCY_PER_PORTAL, (h) => enrich(client, h))
+                ? await mapWithConcurrency(hits, MAX_CONCURRENCY_PER_PORTAL, (h) => (pastDeadline(deadline) ? baseRecord(h) : enrich(client, h)))
                 : hits.map(baseRecord);
             for (const rec of records) {
                 yield rec;

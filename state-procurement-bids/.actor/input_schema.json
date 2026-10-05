@@ -10,7 +10,14 @@
       "editor": "select",
       "items": {
         "type": "string",
-        "enum": ["ma-commbuys", "nj-njstart", "or-oregonbuys", "ga-gpr", "ia-bidopportunities", "la-lapac"],
+        "enum": [
+          "ma-commbuys",
+          "nj-njstart",
+          "or-oregonbuys",
+          "ga-gpr",
+          "ia-bidopportunities",
+          "la-lapac"
+        ],
         "enumTitles": [
           "Massachusetts - COMMBUYS",
           "New Jersey - NJSTART",
@@ -20,8 +27,22 @@
           "Louisiana - LaPAC"
         ]
       },
-      "prefill": ["ma-commbuys", "nj-njstart", "or-oregonbuys", "ga-gpr", "ia-bidopportunities", "la-lapac"],
-      "default": ["ma-commbuys", "nj-njstart", "or-oregonbuys", "ga-gpr", "ia-bidopportunities", "la-lapac"]
+      "prefill": [
+        "ma-commbuys",
+        "nj-njstart",
+        "or-oregonbuys",
+        "ga-gpr",
+        "ia-bidopportunities",
+        "la-lapac"
+      ],
+      "default": [
+        "ma-commbuys",
+        "nj-njstart",
+        "or-oregonbuys",
+        "ga-gpr",
+        "ia-bidopportunities",
+        "la-lapac"
+      ]
     },
     "keyword": {
       "title": "Keyword",
@@ -46,11 +67,21 @@
     "maxResultsPerPortal": {
       "title": "Maximum results per portal",
       "type": "integer",
-      "description": "Stop each portal after this many solicitations. Each solicitation is one charged result.",
+      "description": "Stop each portal after this many solicitations. Each solicitation is one charged result. Each solicitation is one charged result. Start small; a full pull of 200 per portal with descriptions takes 10 to 20 minutes.",
       "minimum": 1,
       "maximum": 5000,
-      "default": 200,
-      "prefill": 200
+      "default": 100,
+      "prefill": 25
+    },
+    "maxRunSeconds": {
+      "title": "Maximum run time (seconds)",
+      "type": "integer",
+      "description": "Stop cleanly and finish with the results collected so far once this many seconds have passed. 0 means no limit beyond the run timeout itself. The actor always stops about 20 seconds before the platform run timeout so the run finishes as SUCCEEDED with partial data instead of TIMED-OUT, and it splits the remaining time evenly across the selected portals.",
+      "minimum": 0,
+      "maximum": 86400,
+      "default": 0,
+      "prefill": 240,
+      "editor": "number"
     },
     "includeDescription": {
       "title": "Fetch detail pages",

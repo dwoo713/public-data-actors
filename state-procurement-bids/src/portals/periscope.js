@@ -8,6 +8,7 @@ import { createClient, formBody, mapWithConcurrency, MAX_CONCURRENCY_PER_PORTAL 
 import { checkRobots } from '../lib/robots.js';
 import { parseLocalDateTime, onOrAfter } from '../lib/dates.js';
 import { cleanText, oneLine, truncate, elementText, classifySolicitationType, classifyAgencyType, extractEmail, extractPhone, makeRecord } from '../lib/normalize.js';
+import { pastDeadline } from '../lib/deadline.js';
 
 const SEARCH_PATH = '/bso/view/search/external/advancedSearchBid.xhtml';
 const DETAIL_PATH = '/bso/external/bidDetail.sda';
@@ -194,7 +195,7 @@ export function createPeriscopePortal({ key, name, state, baseUrl, tz }) {
         async robotsOk() {
             return checkRobots(createClient(), baseUrl, [SEARCH_PATH, DETAIL_PATH]);
         },
-        async *listOpen({ keyword = '', postedAfter = null, closesAfter = null, maxResults = 200, includeDescription = true } = {}) {
+        async *listOpen({ keyword = '', postedAfter = null, closesAfter = null, maxResults = 200, includeDescription = true, deadline = Infinity } = {}) {
             const client = createClient();
             const session = await openSession(client);
 
@@ -250,6 +251,7 @@ export function createPeriscopePortal({ key, name, state, baseUrl, tz }) {
                 let hi = Math.ceil(page.total / PAGE_SIZE) - 1;
                 let found = null;
                 while (lo <= hi) {
+                    if (pastDeadline(deadline)) { log.warning(`${name}: time budget reached while locating open bids`); return; }
                     const mid = Math.floor((lo + hi) / 2);
                     const probe = await fetchPage(mid * PAGE_SIZE);
                     if (probe.length && probe.some(rowIsOpen)) { found = { index: mid, rows: probe }; hi = mid - 1; }
@@ -264,13 +266,14 @@ export function createPeriscopePortal({ key, name, state, baseUrl, tz }) {
             let emptyStreak = 0;
             const seen = new Set();
             for (;;) {
+                if (pastDeadline(deadline)) return;
                 const candidates = rows.filter((r) => {
                     if (seen.has(r.docId)) return false;
                     seen.add(r.docId);
                     return rowIsOpen(r);
                 });
                 const records = includeDescription
-                    ? await mapWithConcurrency(candidates, MAX_CONCURRENCY_PER_PORTAL, (r) => enrich(client, r))
+                    ? await mapWithConcurrency(candidates, MAX_CONCURRENCY_PER_PORTAL, (r) => (pastDeadline(deadline) ? baseRecord(r) : enrich(client, r)))
                     : candidates.map((r) => baseRecord(r));
                 for (const rec of records) {
                     if (postedAfter && rec.postedDate && !onOrAfter(rec.postedDate, postedAfter)) continue;
